@@ -23,7 +23,6 @@ type Question struct {
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	println("rootHandler")
 	db, err := sql.Open("sqlite3", "./data.db")
 	if err != nil {
 		panic(err)
@@ -41,10 +40,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	if err := rows.Err(); err != nil {
 	}
 
-	if len(questions) > 0 {
-		fmt.Println(questions[0])
-	}
-
 	t := template.Must(template.ParseFiles("templates/root.html.tpl"))
 	if err := t.ExecuteTemplate(w, "root.html.tpl", questions); err != nil {
 		log.Fatal(err)
@@ -52,7 +47,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func askHandler(w http.ResponseWriter, r *http.Request) {
-	println("askHandler")
 	t := template.Must(template.ParseFiles("templates/ask.html.tpl"))
 	if err := t.ExecuteTemplate(w, "ask.html.tpl", nil); err != nil {
 		log.Fatal(err)
@@ -60,7 +54,6 @@ func askHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendHandler(w http.ResponseWriter, r *http.Request) {
-	println("sendHandler")
 	r.ParseForm()
 	name := r.Form["name"][0]
 	var text string
@@ -118,7 +111,6 @@ func setDummy() {
 }
 
 func main() {
-	println("main")
 	// DBの用意
 	os.Create("./data.db")
 	var db *sql.DB
