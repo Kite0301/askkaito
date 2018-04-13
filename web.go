@@ -61,41 +61,48 @@ func askHandler(w http.ResponseWriter, r *http.Request) {
 
 func sendHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	name := r.Form["name"][0]
-	var text string
-	if name == "" {
-		name = "匿名ユーザー"
-	}
-	text = r.Form["text"][0]
-	if text == "" {
-		askHandler(w, r)
-		return
-	}
-	t := time.Now()
-	ye, mo, da := t.Date()
-	time := strconv.Itoa(ye) + "/" + strconv.Itoa(int(mo)) + "/" + strconv.Itoa(da)
-	time = time + " " + fmt.Sprintf("%02d", t.Hour())
-	time = time + ":" + fmt.Sprintf("%02d", t.Minute())
 
-	db, err := sql.Open("sqlite3", "./data.db")
-	if err != nil {
-		panic(err)
-	}
-	const sql = "INSERT INTO questions(name, text, created_at) values (?,?,?)"
-
-	ch := make(chan bool)
-	go func() {
-		rec, err2 := db.Exec(sql, name, text, time)
-		if err2 != nil {
+	// データがあるか確認している
+	// もうちょっといいやり方したい
+	if len(r.Form["name"]) < 1 || len(r.Form["text"]) < 1 {
+		rootHandler(w, r)
+	} else {
+		name := r.Form["name"][0]
+		var text string
+		if name == "" {
+			name = "匿名ユーザー"
 		}
-		_, err3 := rec.LastInsertId()
-		if err3 != nil {
+		text = r.Form["text"][0]
+		if text == "" {
+			askHandler(w, r)
+			return
 		}
-		ch <- true
-	}()
-	<-ch
+		t := time.Now()
+		ye, mo, da := t.Date()
+		time := strconv.Itoa(ye) + "/" + strconv.Itoa(int(mo)) + "/" + strconv.Itoa(da)
+		time = time + " " + fmt.Sprintf("%02d", t.Hour())
+		time = time + ":" + fmt.Sprintf("%02d", t.Minute())
 
-	rootHandler(w, r)
+		db, err := sql.Open("sqlite3", "./data.db")
+		if err != nil {
+			panic(err)
+		}
+		const sql = "INSERT INTO questions(name, text, created_at) values (?,?,?)"
+
+		ch := make(chan bool)
+		go func() {
+			rec, err2 := db.Exec(sql, name, text, time)
+			if err2 != nil {
+			}
+			_, err3 := rec.LastInsertId()
+			if err3 != nil {
+			}
+			ch <- true
+		}()
+		<-ch
+
+		rootHandler(w, r)
+	}
 }
 
 func dbExec(db *sql.DB, sql string) {
