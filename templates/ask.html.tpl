@@ -2,7 +2,8 @@
 <html lang="ja" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <title>Ask Kaito</title>
+    <title>Ask Kaito - Kaitoに質問 -</title>
+    <meta content="Ask Kaito - Kaitoに質問 -" property="og:title">
     <style type="text/css">
         * {
             margin: 0;
