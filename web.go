@@ -6,7 +6,9 @@ import (
 	"html/template"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
+	"net/http/fcgi"
 	"os"
 	"strconv"
 	"time"
@@ -111,6 +113,8 @@ func setDummy() {
 }
 
 func main() {
+
+
 	// DBの用意
 	os.Create("./data.db")
 	var db *sql.DB
@@ -133,9 +137,15 @@ func main() {
 
 	setDummy()
 
+	l, err := net.Listen("tcp", "127.0.0.1:9000")
+	if err != nil {
+		return
+	}
+
 	rand.Seed(time.Now().UnixNano())
 	http.HandleFunc("/", rootHandler)
 	http.HandleFunc("/ask", askHandler)
 	http.HandleFunc("/send", sendHandler)
-	http.ListenAndServe(":8080", nil)
+	fcgi.Serve(l, nil)
+	// http.ListenAndServe(":8080", nil)
 }
