@@ -42,8 +42,14 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	if err := rows.Err(); err != nil {
 	}
 
+	sortedQuestions := []Question{}
+	len := len(questions)
+	for index := 0; index < len; index++ {
+		sortedQuestions = append(sortedQuestions, questions[len-1-index])
+	}
+
 	t := template.Must(template.ParseFiles("templates/root.html.tpl"))
-	if err := t.ExecuteTemplate(w, "root.html.tpl", questions); err != nil {
+	if err := t.ExecuteTemplate(w, "root.html.tpl", sortedQuestions); err != nil {
 		log.Fatal(err)
 	}
 }
