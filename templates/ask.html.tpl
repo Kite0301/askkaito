@@ -40,7 +40,7 @@
             color: #495057;
         }
         .fa-bomb {
-            color: #e86b0a;
+            color: #4474a9;
             margin-right: 4px;
         }
         .header-left {
