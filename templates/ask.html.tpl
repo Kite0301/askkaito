@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Ask Kaito - Kaitoに質問 -</title>
     <meta content="Ask Kaito - Kaitoに質問 -" property="og:title">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <style type="text/css">
         * {
             margin: 0;

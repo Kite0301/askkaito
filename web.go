@@ -119,11 +119,9 @@ func setDummy() {
 }
 
 func main() {
-
-
-	// DBの用意
-	os.Create("./data.db")
-	var db *sql.DB
+	// DBの作成
+	// os.Create("./data.db")
+	// var db *sql.DB
 	db, err := sql.Open("sqlite3", "./data.db")
 	if err != nil {
 		fmt.Println(err)
